@@ -23,7 +23,6 @@ async def process_start_command(message: types.Message):
 async def get_top_users_command(message: types.Message):
     if message.from_user.id in ADMINS:
         users = db.get_top_member_added_users()
-        print(25, users)
         message_text = f"Guruhga eng ko'p odam qo'shgan foydalanuvchilar:\n"
         for user in users:
             message_text += f"{user[1]}: {user[-1]}\n"
