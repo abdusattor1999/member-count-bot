@@ -7,5 +7,5 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-BOT_TOKEN="5625252511:AAEyJn96sF4MIs1A1SilBfFvjK4I9N7wEmI"
+BOT_TOKEN="6820079737:AAHGjPwPfmZFV3LxFlmUzcK0yJ9bVBiEvnk"
 ADMINS = ["148603286", "1894942514"]
