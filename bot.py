@@ -34,8 +34,9 @@ async def get_top_users_command(message: types.Message):
 @dp.message(F.new_chat_members)
 async def new_member_message(message: types.Message):
     try:
-        for member in message.new_chat_members:
-            db.add_member_count(message.from_user.id)
+        print("Members added count:", len(message.new_chat_members))
+        if message.new_chat_members:
+            db.add_member_count(id=message.from_user.id, number=len(message.new_chat_members))
         await message.delete()
     except Exception as ex:
         print(111, ex.args)

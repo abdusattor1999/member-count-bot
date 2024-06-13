@@ -187,15 +187,15 @@ class Database:
         """
         return self.execute(sql, fetchall=True)
 
-    def add_member_count(self, id):
-        add_memner_sql = """
+    def add_member_count(self, id, number=1):
+        add_member_sql = """
         UPDATE Users
-        SET added_members_count = added_members_count + 1
+        SET added_members_count = added_members_count + ?
         WHERE id = ?
         """
         conn = sqlite3.connect(self.path_to_db)
         cursor = conn.cursor()
-        cursor.execute(add_memner_sql, (id,))
+        cursor.execute(add_member_sql, (number, id))
         conn.commit()
         conn.close()
 
