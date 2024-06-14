@@ -1,7 +1,6 @@
 import asyncio
 from aiogram import Bot, Dispatcher, F
 from aiogram.filters import CommandStart, Command
-from aiogram.filters import IS_MEMBER, IS_ADMIN
 from aiogram import types
 from config import BOT_TOKEN, ADMINS
 from sql_db import Database
@@ -30,20 +29,18 @@ async def get_top_users_command(message: types.Message):
     else:
         await message.reply("Kechirasiz bu imkoniyat faqat guruh adminiga berilgan !")
 
-
 @dp.message(F.new_chat_members)
 async def new_member_message(message: types.Message):
     try:
-        print("Members added count:", len(message.new_chat_members))
         if message.new_chat_members:
-            db.add_member_count(id=message.from_user.id, number=len(message.new_chat_members))
+            db.add_member_count(id=message.from_user.id, first_name=message.from_user.first_name, number=len(message.new_chat_members))
         await message.delete()
     except Exception as ex:
         print(111, ex.args)
 
 @dp.message(F.left_chat_member)
 async def left_member_message(message: types.Message):
-    try:
+    try: 
         await message.delete()
     except Exception as ex:
         print(111, ex.args)

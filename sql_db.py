@@ -186,17 +186,31 @@ class Database:
         """
         return self.execute(sql, fetchall=True)
 
-    def add_member_count(self, id, number=1):
-        add_member_sql = """
-        UPDATE Users
-        SET added_members_count = added_members_count + ?
-        WHERE id = ?
-        """
-        conn = sqlite3.connect(self.path_to_db)
-        cursor = conn.cursor()
-        cursor.execute(add_member_sql, (number, id))
-        conn.commit()
-        conn.close()
+    def add_member_count(self, id, first_name, number=1):
+        try:
+            conn = sqlite3.connect(self.path_to_db)
+            cursor = conn.cursor()
+
+            select_sql = "SELECT id FROM Users WHERE id = ?"
+            cursor.execute(select_sql, (id,))
+
+            if cursor.fetchone() is None:
+                # User doesn't exist, create a new record
+                insert_sql = "INSERT INTO Users (id, first_name, added_members_count) VALUES (?, ?, ?)"
+                cursor.execute(insert_sql, (id, first_name, 0))
+
+            update_sql = "UPDATE Users SET added_members_count = added_members_count + ? WHERE id = ?"
+            cursor.execute(update_sql, (number, id))
+            conn.commit()
+            conn.close()
+
+        except sqlite3.Error as e:
+            print(f"Error adding member count for user {id}: {e}")
+            return 0  # Return 0 to indicate potential failure
+
+        finally:
+            if conn:
+                conn.close()
 
     def get_or_create(self, user):
         try:
